@@ -1,24 +1,23 @@
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
 
-import { getFirestore } from 'firebase/firestore';
 const firebaseConfig = {
-    apiKey: "AIzaSyBqUmYO3KznEJaSzfHkwh3ULX-LNoR8f1c",
-    authDomain: "medical-dd248.firebaseapp.com",
-    projectId: "medical-dd248",
-    storageBucket: "medical-dd248.appspot.com",
-    messagingSenderId: "518789872630",
-    appId: "1:518789872630:web:26312948308685fde225d7",
-    measurementId: "G-KK8QYSE6NS"
+  apiKey: "AIzaSyBqUmYO3KznEJaSzfHkwh3ULX-LNoR8f1c",
+  authDomain: "medical-dd248.firebaseapp.com",
+  projectId: "medical-dd248",
+  storageBucket: "medical-dd248.appspot.com",
+  messagingSenderId: "518789872630",
+  appId: "1:518789872630:web:26312948308685fde225d7",
+  measurementId: "G-KK8QYSE6NS"
 };
-
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
 // Function to store user data
 const storeUserData = async (user) => {
   await AsyncStorage.setItem('user', JSON.stringify(user));
@@ -43,5 +42,22 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-export { auth, db };
+// Firestore functions for WebRTC
+const fetchOfferFromFirebase = async (roomId) => {
+  const roomRef = doc(db, 'rooms', roomId);
+  const roomSnapshot = await getDoc(roomRef);
+  return roomSnapshot.exists() ? roomSnapshot.data().offer : null;
+};
+
+const sendOfferToFirebase = async (offer, roomId) => {
+  const roomRef = doc(db, 'rooms', roomId);
+  await setDoc(roomRef, { offer: offer }, { merge: true });
+};
+
+const sendAnswerToFirebase = async (answer, roomId) => {
+  const roomRef = doc(db, 'rooms', roomId);
+  await updateDoc(roomRef, { answer: answer });
+};
+
+export { auth, db, fetchOfferFromFirebase, sendAnswerToFirebase, sendOfferToFirebase };
 
