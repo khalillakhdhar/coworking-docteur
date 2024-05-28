@@ -1,11 +1,10 @@
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import "react-datepicker/dist/react-datepicker.css";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../constants/Colors';
 import { auth, db } from '../firebase/firebase';
 
-export default function HomePage({ navigation }: { navigation: any }) {
+export default function HomePage({ navigation }) {
   const [patients, setPatients] = useState([]);
 
   useEffect(() => {
@@ -19,6 +18,10 @@ export default function HomePage({ navigation }: { navigation: any }) {
       return () => unsubscribe();
     }
   }, []);
+
+  const startVideoCall = (patientId) => {
+    navigation.navigate('VideoCall', { roomName: patientId });
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -36,13 +39,18 @@ export default function HomePage({ navigation }: { navigation: any }) {
           <TouchableOpacity onPress={() => navigation.navigate('Prescription', { patientId: patient.id })}>
             <Text style={{ color: Colors.lightBlue, fontSize: 20 }}>Prescription</Text>
           </TouchableOpacity>
+
           <TouchableOpacity onPress={() => navigation.navigate('Appointment', { patientId: patient.id })}>
             <Text style={{ color: Colors.lightBlue, fontSize: 20 }}>Appointment</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => startVideoCall(patient.id)}>
+            <Text style={{ color: Colors.lightBlue, fontSize: 20 }}>Start Video Call</Text>
           </TouchableOpacity>
         </View>
       ))}
     </ScrollView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
