@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -19,7 +19,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Function to store user data
-const storeUserData = async (user) => {
+const storeUserData = async (user: User) => {
   await AsyncStorage.setItem('user', JSON.stringify(user));
 };
 
@@ -32,32 +32,29 @@ const loadUserData = async () => {
 // Auth State Change Listener
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // User is signed in
     await storeUserData(user);
     console.log('User signed in');
   } else {
-    // User is signed out
     console.log('User signed out');
     await AsyncStorage.removeItem('user');
   }
 });
 
 // Firestore functions for WebRTC
-const fetchOfferFromFirebase = async (roomId) => {
+const fetchOfferFromFirebase = async (roomId: string) => {
   const roomRef = doc(db, 'rooms', roomId);
   const roomSnapshot = await getDoc(roomRef);
-  return roomSnapshot.exists() ? roomSnapshot.data().offer : null;
+  return roomSnapshot.exists() ? roomSnapshot.data()?.offer : null;
 };
 
-const sendOfferToFirebase = async (offer, roomId) => {
+const sendOfferToFirebase = async (offer: RTCSessionDescriptionInit, roomId: string) => {
   const roomRef = doc(db, 'rooms', roomId);
   await setDoc(roomRef, { offer: offer }, { merge: true });
 };
 
-const sendAnswerToFirebase = async (answer, roomId) => {
+const sendAnswerToFirebase = async (answer: RTCSessionDescriptionInit, roomId: string) => {
   const roomRef = doc(db, 'rooms', roomId);
   await updateDoc(roomRef, { answer: answer });
 };
 
 export { auth, db, fetchOfferFromFirebase, sendAnswerToFirebase, sendOfferToFirebase };
-
