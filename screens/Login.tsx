@@ -43,7 +43,7 @@ export default function Login({ navigation }: { navigation: any }) {
   return (
     <View style={styles.container}>
       <View style={styles.loginHeader}>
-        <Text style={styles.loginHeaderText}>Se connecter en tant que docteur 🚀</Text>
+        <Text style={styles.loginHeaderText}>Se connecter en tant que docteur </Text>
       </View>
 
       <View style={styles.loginContainer}>

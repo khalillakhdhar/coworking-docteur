@@ -52,7 +52,7 @@ export default function Signup({ navigation }: { navigation: any }) {
   return (
     <View style={styles.container}>
       <View style={styles.loginHeader}>
-        <Text style={styles.loginHeaderText}>S'inscrire en tant que docteur 🎉</Text>
+        <Text style={styles.loginHeaderText}>S'inscrire en tant que docteur </Text>
       </View>
 
       <KeyboardAvoidingView behavior="padding" style={styles.loginContainer}>
