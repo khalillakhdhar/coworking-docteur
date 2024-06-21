@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { InitialScreenOnStart } from "./InitialScreenOnStart";
 import AuthStack from "./AuthStack";
+import { InitialScreenOnStart } from "./InitialScreenOnStart";
 
 import { User, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/firebase";

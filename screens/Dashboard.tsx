@@ -6,11 +6,11 @@ import { auth, db } from "../firebase/firebase";
 
 export default function Dashboard({ navigation }: { navigation: any }) {
   const [userInfo, setUserInfo] = useState<any | undefined>(null);
-  const [userData,setUserData]=useState<any | undefined>(null);
+  const [userData, setUserData] = useState<any | undefined>(null);
 
   const handleSignout = async () => {
-    if(confirm("vous voulez vous deconnecter?"))
-    await auth.signOut();
+    if (confirm("vous voulez vous deconnecter?"))
+      await auth.signOut();
   };
 
   const Modal = () => {
@@ -24,7 +24,6 @@ export default function Dashboard({ navigation }: { navigation: any }) {
   };
 
   const getData = async () => {
-
     const docRef = doc(db, "users", "info");
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -33,32 +32,25 @@ export default function Dashboard({ navigation }: { navigation: any }) {
     } else {
       console.log("aucun document!");
     }
-    // read data from firestore database user
-
   };
-// get data with email from firestore database users collection
-const readDataFromFirestore = async () => {
-  const usersCollection = collection(db, "users");
-  const usersSnapshot = await getDocs(usersCollection);
-  usersSnapshot.forEach((doc) => {
-    if (doc.data().email === auth.currentUser?.email) {
-      console.log("Document data:", doc.data());
-      setUserData(doc.data());
-      setUserInfo(doc.data());
-    }
-  });
-};
 
-useEffect(() => {
-  getData();
-  setUserInfo(auth.currentUser);
-  readDataFromFirestore();
-}, []);
+  const readDataFromFirestore = async () => {
+    const usersCollection = collection(db, "users");
+    const usersSnapshot = await getDocs(usersCollection);
+    usersSnapshot.forEach((doc) => {
+      if (doc.data().email === auth.currentUser?.email) {
+        console.log("Document data:", doc.data());
+        setUserData(doc.data());
+        setUserInfo(doc.data());
+      }
+    });
+  };
 
-
-
-
-
+  useEffect(() => {
+    getData();
+    setUserInfo(auth.currentUser);
+    readDataFromFirestore();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -76,7 +68,11 @@ useEffect(() => {
           <Text style={{ color: Colors.white, fontSize: 20 }}>Profile docteur</Text>
         </TouchableOpacity>
       </View>
-      
+      <View>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Appointments')}>
+          <Text style={{ color: Colors.white, fontSize: 20 }}>Gérer les rendez-vous</Text>
+        </TouchableOpacity>
+      </View>
       <View>
         <TouchableOpacity style={styles.button} onPress={handleSignout}>
           <Text style={{ color: Colors.white, fontSize: 20 }}>Déconnexion</Text>

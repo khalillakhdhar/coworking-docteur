@@ -21,6 +21,7 @@
     "@types/webrtc": "^0.0.43",
     "date-fns": "^3.6.0",
     "expo": "^51.0.12",
+    "expo-camera": "~15.0.11",
     "expo-status-bar": "~1.12.1",
     "firebase": "^10.12.2",
     "force": "^0.0.3",

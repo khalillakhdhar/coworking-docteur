@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import {
   Dimensions,
   KeyboardAvoidingView,
+  Modal,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -22,14 +24,23 @@ if (Platform.OS === "ios") {
   top = 0;
 }
 
+const specialties = ["Cardiologie", "Dermatologie", "Gynécologie", "Pédiatrie", "Neurologie", "Oncologie"];
+
 export default function Signup({ navigation }: { navigation: any }) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<any>("");
   const [username, setUsername] = useState<string>("");
   const [phone, setPhone] = useState<number | string>("");
+  const [specialty, setSpecialty] = useState<string>(specialties[0]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const handleSignup = async () => {
+    if (!email || !password || !username || !phone || !specialty) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
     setLoading(true);
     await createUserWithEmailAndPassword(auth, email.trim(), password)
       .then((userCredential) => {
@@ -39,24 +50,25 @@ export default function Signup({ navigation }: { navigation: any }) {
           Name: username,
           Email: email,
           PhoneNumber: phone,
+          Specialty: specialty,
           CreatedAt: new Date().toUTCString(),
-          grade:"medecin"
+          grade: "medecin"
         });
       })
-      .then(() => alert("compte crée avec succées 🎉"))
+      .then(() => alert("compte crée avec succès 🎉"))
       .catch((err: any) => {
-        alert(err.meassage);
+        alert(err.message);
+        setLoading(false);
       });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.loginHeader}>
-        <Text style={styles.loginHeaderText}>S'inscrire en tant que docteur </Text>
+        <Text style={styles.loginHeaderText}>S'inscrire en tant que docteur</Text>
       </View>
 
       <KeyboardAvoidingView behavior="padding" style={styles.loginContainer}>
-        {/* Username */}
         <View style={styles.emailContainer}>
           <Text style={styles.emailText}>Nom d'utilisateur</Text>
           <TextInput
@@ -66,7 +78,6 @@ export default function Signup({ navigation }: { navigation: any }) {
             onChangeText={(text) => setUsername(text)}
           />
         </View>
-        {/* Email */}
         <View style={styles.emailContainer}>
           <Text style={styles.emailText}>Email</Text>
           <TextInput
@@ -74,9 +85,10 @@ export default function Signup({ navigation }: { navigation: any }) {
             placeholder="Votre email"
             value={email}
             onChangeText={(text) => setEmail(text)}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
         </View>
-        {/* Phone Number */}
         <View style={styles.emailContainer}>
           <Text style={styles.emailText}>Numéro de téléphone</Text>
           <TextInput
@@ -87,7 +99,6 @@ export default function Signup({ navigation }: { navigation: any }) {
             onChangeText={(text) => setPhone(text)}
           />
         </View>
-        {/* Password */}
         <View style={styles.passwordContainer}>
           <Text style={styles.passwordText}>Mot de passe</Text>
           <TextInput
@@ -98,9 +109,13 @@ export default function Signup({ navigation }: { navigation: any }) {
             onChangeText={(text) => setPassword(text)}
           />
         </View>
-        {/* Forgot Password */}
+        <View style={styles.emailContainer}>
+          <Text style={styles.emailText}>Spécialité</Text>
+          <TouchableOpacity style={styles.selectInput} onPress={() => setModalVisible(true)}>
+            <Text>{specialty}</Text>
+          </TouchableOpacity>
+        </View>
 
-        {/* Login Button */}
         <View style={styles.loginButton}>
           <TouchableOpacity onPress={handleSignup}>
             <Text style={styles.loginButtonText}>
@@ -116,6 +131,32 @@ export default function Signup({ navigation }: { navigation: any }) {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ScrollView>
+              {specialties.map((spec) => (
+                <TouchableOpacity
+                  key={spec}
+                  style={styles.modalItem}
+                  onPress={() => {
+                    setSpecialty(spec);
+                    setModalVisible(false);
+                  }}
+                >
+                  <Text style={styles.modalItemText}>{spec}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -125,15 +166,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 15,
     marginTop: height * 0.05,
-  },
-  arrowContainer: {
-    width: 40,
-    height: 40,
-    borderTopLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    backgroundColor: Colors.primary,
-    justifyContent: "center",
-    alignItems: "center",
   },
   loginHeader: {
     marginTop: 20,
@@ -179,14 +211,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.light,
   },
-  forgotContainer: {
-    marginTop: 20,
-    alignItems: "flex-end",
-  },
-  forgotText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: Colors.primary,
+  selectInput: {
+    height: 50,
+    justifyContent: "center",
+    backgroundColor: Colors.light,
+    borderWidth: 1,
+    borderColor: Colors.light,
+    borderRadius: 8,
+    paddingLeft: 10,
   },
   loginButton: {
     marginTop: 20,
@@ -218,5 +250,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     marginRight: 5,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: width * 0.8,
+    backgroundColor: Colors.white,
+    borderRadius: 8,
+    padding: 20,
+  },
+  modalItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light,
+  },
+  modalItemText: {
+    fontSize: 16,
   },
 });

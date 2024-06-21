@@ -1,4 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Appointments from "../screens/Appointments";
+import Chat from "../screens/Chat"; // Import the Chat component
 import Dashboard from "../screens/Dashboard";
 import HomePage from "../screens/HomePage";
 import Personal from "../screens/Personal";
@@ -64,6 +66,20 @@ export default function AuthStack() {
       <Stack.Screen
         name="Prescriptions"
         component={Prescription}
+        options={{
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="Appointments"
+        component={Appointments}
+        options={{
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="Chat" // Add the Chat screen to the navigation stack
+        component={Chat}
         options={{
           headerShown: true,
         }}
