@@ -53,11 +53,11 @@ export default function HomePage({ navigation }) {
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Prescription', { patientId: patient.id })}>
-              <Text style={{ color: Colors.lightBlue, fontSize: 20 }}>Prescription</Text>
+              <Text style={{ color: Colors.lightBlue, fontSize: 20 }}>Prescriptions</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Appointment', { patientId: patient.id })}>
-              <Text style={{ color: Colors.lightBlue, fontSize: 20 }}>Appointment</Text>
+              <Text style={{ color: Colors.lightBlue, fontSize: 20 }}>Rendez vous</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Chat', { patientId: patient.id })}>
@@ -65,7 +65,7 @@ export default function HomePage({ navigation }) {
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => startVideoCall(patient.id)}>
-              <Text style={{ color: Colors.lightBlue, fontSize: 20 }}>Start Video Call</Text>
+              <Text style={{ color: Colors.lightBlue, fontSize: 20 }}> Video Call</Text>
             </TouchableOpacity>
           </View>
         ))}

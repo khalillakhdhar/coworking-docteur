@@ -14,11 +14,7 @@ const VideoCallWeb = () => {
   }, []);
 
   return (
-    <><div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <video ref={videoRef} autoPlay playsInline style={{ width: '100%', maxWidth: '600px' }} />
-    </div><div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        en attente de l'appel
-      </div></>
+    <a href='https://appcall.daily.co/visio'>Démarré la visio</a>
   );
 };
 
