@@ -58,7 +58,6 @@ export default function Profile({ route, navigation }: { route: any, navigation:
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Votre profil</Text>
-      <iframe seamless width="80%"  height="150" src="https://stem.ubidots.com/app/dashboards/public/widget/aDa2T6ZA5ms6ODO-1NJtYXkZ7kK5snke1ElFo36TxIU?embed=true"></iframe>
 
       <TextInput style={styles.input} placeholder="Poids (kg)" onChangeText={setPoids} keyboardType="numeric" value={poids} />
       <TextInput style={styles.input} placeholder="Taille (cm)" onChangeText={setTaille} keyboardType="numeric" value={taille} />

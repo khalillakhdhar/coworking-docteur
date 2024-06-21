@@ -1,18 +1,18 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TextInput,
-  Platform,
-  Dimensions,
-  KeyboardAvoidingView,
-} from "react-native";
-import React, { useState } from "react";
-import Colors from "../constants/Colors";
-import { auth, db } from "../firebase/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import React, { useState } from "react";
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Colors from "../constants/Colors";
+import { auth, db } from "../firebase/firebase";
 
 const { width, height } = Dimensions.get("window");
 let top;
