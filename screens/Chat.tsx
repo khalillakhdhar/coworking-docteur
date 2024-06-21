@@ -20,8 +20,7 @@ export default function Chat({ route }) {
 
     const q = query(
       collection(db, "messages"),
-      where("patientId", "==", patientId),
-      where("userId", "==", user.uid),
+      where("participants", "array-contains", user.uid),
       orderBy("sentAt", "asc")
     );
 
@@ -40,8 +39,8 @@ export default function Chat({ route }) {
   const handleSend = async () => {
     if (message.trim()) {
       await addDoc(collection(db, "messages"), {
-        patientId,
-        userId: user.uid,
+        participants: [user.uid, patientId],
+        senderId: user.uid,
         message,
         read: false,
         sentAt: new Date().toISOString(),
@@ -51,8 +50,8 @@ export default function Chat({ route }) {
   };
 
   const renderItem = ({ item }) => (
-    <View style={item.userId === user.uid ? styles.myMessage : styles.theirMessage}>
-      <Text style={item.userId === user.uid ? styles.myMessageText : styles.theirMessageText}>
+    <View style={item.senderId === user.uid ? styles.myMessage : styles.theirMessage}>
+      <Text style={item.senderId === user.uid ? styles.myMessageText : styles.theirMessageText}>
         {item.message}
       </Text>
       <Text style={styles.dateText}>{new Date(item.sentAt).toLocaleString()}</Text>
